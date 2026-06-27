@@ -13,15 +13,11 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
-                        .allowedOrigins(
-                            "http://localhost:5173",
-                            "https://frontend-plannerdb-e5m4jcl96-if0006-plannerdb1.vercel.app",
-                            "https://*.vercel.app"
-                        )
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(false);
+               registry.addMapping("/api/**")
+    .allowedOriginPatterns("*")
+    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+    .allowedHeaders("*")
+    .allowCredentials(false);
             }
         };
     }
