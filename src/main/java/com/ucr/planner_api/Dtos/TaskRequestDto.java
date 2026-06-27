@@ -12,7 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class TaskRequestDto {
-    private Integer taskId;
     private String taskName;
     private LocalDateTime createdDate;
     private LocalDateTime dueDate;

@@ -35,8 +35,6 @@ public class TaskMapper {
                 task.getUser().getResourceIdUser(),
                 task.getCourse().getResourceIdCourse()
         );
-
-        
     }
 
     public List<TaskDto> toTaskDtosList(List<Task> tasks) {
@@ -49,26 +47,25 @@ public class TaskMapper {
                 .collect(Collectors.toList());
     }
 
-   public TaskResponseModel toTaskResponseModel(TaskDto taskDto) {
-    if (taskDto == null) {
-        return null;
+    public TaskResponseModel toTaskResponseModel(TaskDto taskDto) {
+        if (taskDto == null) {
+            return null;
+        }
+
+        return new TaskResponseModel(
+                taskDto.taskId(),
+                taskDto.taskName(),
+                taskDto.createdDate(),
+                taskDto.dueDate(),
+                taskDto.done(),
+                taskDto.details(),
+                taskDto.state(),
+                taskDto.priority(),
+                taskDto.course().getCourseCode(),
+                taskDto.user().getUserId(),
+                taskDto.resourceId_Task()
+        );
     }
-
-    return new TaskResponseModel(
-            taskDto.taskId(),
-            taskDto.taskName(),
-            taskDto.createdDate(),
-            taskDto.dueDate(),
-            taskDto.done(),
-            taskDto.details(),
-            taskDto.state(),
-            taskDto.priority(),
-            taskDto.course().getCourseCode(),
-            taskDto.user().getUserId(),
-            taskDto.resourceId_Task()
-    );
-}
-
 
     public List<TaskResponseModel> toTaskResponseModelList(List<TaskDto> taskDtos) {
         if (taskDtos == null) {
@@ -80,7 +77,7 @@ public class TaskMapper {
                 .collect(Collectors.toList());
     }
 
-    //CREATE TOTASKENTITY
+    // CREATE / UPDATE -> toEntity
     public Task toEntity(TaskRequestDto dto) {
         if (dto == null) {
             return null;
@@ -93,24 +90,22 @@ public class TaskMapper {
         task.setDetails(dto.getDetails());
         task.setPriority(dto.getPriority());
 
-        task.setCreatedDate(java.time.LocalDateTime.now());
-        task.setDone(false);
-        task.setState("pending");
+        task.setCreatedDate(dto.getCreatedDate() != null ? dto.getCreatedDate() : java.time.LocalDateTime.now());
+        task.setDone(dto.getDone() != null ? dto.getDone() : false);
+        task.setState(dto.getState() != null && !dto.getState().isBlank() ? dto.getState() : "pending");
         task.setResourceIdTask(UUID.randomUUID());
 
         return task;
     }
 
-
-    //Update->
-      public TaskRequestDto toTaskRequestDto(TaskRequestModel task) {
+    // Update ->
+    public TaskRequestDto toTaskRequestDto(TaskRequestModel task) {
         if (task == null) {
             return null;
         }
 
         TaskRequestDto taskDto = new TaskRequestDto();
-        taskDto.setTaskId(task.taskId());
-        taskDto.setTaskName(task.taskName());   
+        taskDto.setTaskName(task.taskName());
         taskDto.setCreatedDate(task.createdDate());
         taskDto.setDueDate(task.dueDate());
         taskDto.setDone(task.done());
@@ -122,6 +117,4 @@ public class TaskMapper {
 
         return taskDto;
     }
-    
 }
-

@@ -18,6 +18,8 @@ import jakarta.transaction.Transactional;
 @Component
 public class TaskFacade implements ITaskFacade {
 
+    private static final String DEFAULT_COURSE_CODE = "IF-0001";
+
     @Autowired
     private ITaskService taskService;
 
@@ -40,8 +42,12 @@ public TaskDto create(TaskRequestDto dto) {
      // 1. Verificar que el usuario existe
     var user = userService.getById(dto.getUserId());
 
-    // 2. Verificar que el curso existe
-    var course = courseService.getById(dto.getCourseCode()); 
+    // 2. Verificar que el curso existe, o usar curso predeterminado si no viene en la solicitud
+    var courseCode = dto.getCourseCode();
+    if (courseCode == null || courseCode.isBlank()) {
+        courseCode = DEFAULT_COURSE_CODE;
+    }
+    var course = courseService.getById(courseCode);
 
     // 3. Convertir DTO a entidad
     var taskEntity = taskMapper.toEntity(dto);
@@ -60,7 +66,12 @@ public TaskDto create(TaskRequestDto dto) {
      @Override
     public TaskDto updateTask(UUID resourceId_Task, TaskRequestDto taskDto) {
     var user = userService.getById(taskDto.getUserId());
-    var course = courseService.getById(taskDto.getCourseCode());
+
+    var courseCode = taskDto.getCourseCode();
+    if (courseCode == null || courseCode.isBlank()) {
+        courseCode = DEFAULT_COURSE_CODE;
+    }
+    var course = courseService.getById(courseCode);
 
     var taskData = taskMapper.toEntity(taskDto);
     taskData.setUser(user);

@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 
 
 public record TaskRequestModel(
-    @NotNull(message = "ID de tarea requerido") Integer taskId,
     @NotBlank(message = "Nombre de tarea requerido") String taskName,
     @NotNull(message = "Fecha de creación requerida") LocalDateTime createdDate,
     @Future(message = "La fecha de entrega debe ser futura") LocalDateTime dueDate,
@@ -16,6 +15,6 @@ public record TaskRequestModel(
     String details,
     @NotBlank(message = "Estado requerido") String state,
     @NotBlank(message = "Prioridad requerida") String priority,
-    @NotBlank(message = "Curso requerido") String courseCode,
+    String courseCode,
     @NotBlank(message = "Usuario requerido") String userId
 ) {}
